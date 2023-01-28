@@ -117,7 +117,7 @@ class _DentistHome extends State<DentistHome> {
                     )
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 40, top: 39),
+                    padding: const EdgeInsets.only(left: 40, top: 39),
                     child: TextButton(
                       onPressed: (){
                         setState(() {
@@ -139,9 +139,12 @@ class _DentistHome extends State<DentistHome> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 30, 0, 0),
-              child: widgets[selectedMenuOption],
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(40, 30, 0, 0),
+                child:widgets[selectedMenuOption]
+
+              ),
             ),
           ]
         )
