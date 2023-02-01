@@ -141,7 +141,7 @@ class _DentistHome extends State<DentistHome> {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 0, 0),
+                padding: const EdgeInsets.fromLTRB(40, 30, 0, 2),
                 child:widgets[selectedMenuOption]
 
               ),
