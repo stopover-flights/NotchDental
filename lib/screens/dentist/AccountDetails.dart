@@ -40,35 +40,39 @@ class _AccountDetails extends State<AccountDetails> {
   TextEditingController price = TextEditingController(text: office.cleaningPrice);
   TextEditingController bankRouting = TextEditingController(text: office.bankRouting);
   TextEditingController bankAccount = TextEditingController(text: office.bankAccount);
+  TextEditingController newPassword = TextEditingController();
+  TextEditingController repeatNewPassword = TextEditingController();
 
-  var editName = false;
-  var editAddress = false;
+
+
+  var editPracticeInfo = false;
+  var editPassword = false;
   var editAccountInfo =  false;
-  var editCleaningPrice =  false;
   var editContactInfo = false;
   var editBankInfo =  false;
   //TODO:
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child:Column(
-        children: [
+      child:
           LayoutGrid(
             columnSizes: [1.fr, 1.fr],
             rowSizes: const [auto, auto, auto, auto],
             rowGap: 40,
-            //columnGap: 24,
+            columnGap: 15,
             children: [
-              //DENTAL PRACTICE
+              //ACCOUNT INFO
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+
                 //direction: Axis.vertical,
                 children: [
                   Row(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Dental Practice",
+                        "Account Information",
                         style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w700,
@@ -76,29 +80,39 @@ class _AccountDetails extends State<AccountDetails> {
                         ),
                       ),
                       IconButton(
-                        onPressed: ()=>{
-                          setState(() {
-                            editName = true;
-                          })
-                        },
-                        icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),)
-                      )
+                          onPressed: ()=>{
+                            setState((){
+                              editAccountInfo=true;
+                            })
+                          },
+                          icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),))
                     ],
                   ),
-                  editName ?
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Name of Practice",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF161C39)
+                      ),
+                    ),
+                  ),
+                  editAccountInfo ?
                   SizedBox(
                     width: 250,
                     child: TextField(
-                    cursorColor: Color(0xFF161C39),
+                      cursorColor: Color(0xFF161C39),
                       controller: name,
                       style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF161C39)
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
                       ),
                     ),
                   )
-                  :
+                      :
                   Text(
                     name.text,
                     style: const TextStyle(
@@ -107,19 +121,136 @@ class _AccountDetails extends State<AccountDetails> {
                         color: Color(0xFF161C39)
                     ),
                   ),
+
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Username (email)",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF161C39)
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5, bottom: 20),
+                    child: Text(
+                      username.text,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
+                      ),
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                          "Password",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF161C39)
+                          ),
+                        ),
+
+
+                      IconButton(
+                          onPressed: ()=>{
+                            setState((){
+                              editPassword=true;
+                            })
+                          },
+                          icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39), size: 20,)
+                      )
+                    ],
+                  ),
+                  editPassword
+                  ?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //TODO: add controllers
+                      SizedBox(
+                        width: 250,
+                        child: TextField(
+                          cursorColor: const Color(0xFF161C39),
+                          controller: newPassword,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF161C39)
+                          ),
+                          decoration: const InputDecoration(
+                            hintText: "Password",
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 250,
+                        child: TextField(
+                          cursorColor: const Color(0xFF161C39),
+                          controller: repeatNewPassword,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF161C39)
+                          ),
+                          decoration: const InputDecoration(
+                            hintText: "Confirm Password",
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:const MaterialStatePropertyAll<Color>(Color(0xFF161C39)),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                      )
+                                  )
+                              ),
+
+                              onPressed: ()=>{
+
+                              },
+                              child: const Text("Change Password",style: TextStyle(color: Colors.white),)
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                  :
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(
+                      password.text,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
-              //PRACTICE ADDRESS
+              //PRACTICE INFORMATION
               Column(
                 //direction: Axis.vertical,
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        "Practice Address",
+                        "Practice Information",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w700,
@@ -129,14 +260,14 @@ class _AccountDetails extends State<AccountDetails> {
                       IconButton(
                         onPressed: ()=>{
                           setState((){
-                            editAddress=true;
+                            editPracticeInfo=true;
                           })
                         },
                         icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),)
                       )
                     ],
                   ),
-                  editAddress ?
+                  editPracticeInfo ?
                   Column(
                     children: [
                       SizedBox(
@@ -202,7 +333,7 @@ class _AccountDetails extends State<AccountDetails> {
                       SizedBox(
                         width: 250,
                         child: TextField(
-                          cursorColor: Color(0xFF161C39),
+                          cursorColor: const Color(0xFF161C39),
                           controller: zip,
                           style: const TextStyle(
                               fontSize: 20,
@@ -217,117 +348,36 @@ class _AccountDetails extends State<AccountDetails> {
                     ],
                   )
                   :
-                  Text(
-                    "${address.text}, ${address2.text}\n${city.text}, ${state.text} ${zip.text}",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF161C39)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Text(
+                      "${address.text}, ${address2.text}\n${city.text}, ${state.text} ${zip.text}",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF161C39)
+                      ),
                     ),
                   ),
-                ],
-              ),
-              //ACCOUNT INFO
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                //direction: Axis.vertical,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "Account Info",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF161C39)
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: ()=>{
-                          setState((){
-                            editAccountInfo=true;
-                          })
-                        },
-                        icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),))
-                    ],
-                  ),
+                  editPracticeInfo ?
+                   const SizedBox(
+                     height: 10,
+                   )
+                  :
+                  const SizedBox(height: 0),
                   const Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
-                      "Username (email)",
+                      "Dental Cleaning Flat Price",
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF161C39)
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Text(
-                      username.text,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF161C39)
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      "Password",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF161C39)
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Text(
-                      password.text,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF161C39)
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              //DENTAL CLEANING PRICE
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                //direction: Axis.vertical,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "Dental Cleaning Price",
-                        style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 20,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF161C39)
-                        ),
                       ),
-                      IconButton(
-                          onPressed: ()=>{
-                            setState((){
-                              editCleaningPrice=true;
-                            })
-                          },
-                          icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),)
-                      )
-                    ],
+                    ),
                   ),
-                  editCleaningPrice
-                  ?
+                  editPracticeInfo
+                      ?
                   SizedBox(
                     width: 250,
                     child: TextField(
@@ -349,22 +399,22 @@ class _AccountDetails extends State<AccountDetails> {
                     child: Text(
                       "\$${price.text}",
                       style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF161C39)
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
                       ),
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      "*We use this to calculate discounts to bring\nin cash-paying, flexible patients",
+                      "*We use this to calculate discounts to bring in cash-paying, flexible patients",
                       softWrap: true,
                       maxLines: 3,
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF161C39)
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
                       ),
                     ),
                   ),
@@ -380,14 +430,21 @@ class _AccountDetails extends State<AccountDetails> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        "Contact Info",
+                        "Contact Information",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF161C39)
                         ),
                       ),
-                      IconButton(onPressed: ()=>{}, icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),))
+                      IconButton(
+                          onPressed: ()=>{
+                            setState((){
+                              editContactInfo=true;
+                            })
+                          },
+                          icon: const Icon(IconData(0xef8d, fontFamily: 'MaterialIcons'), color: Color(0xFF161C39),)
+                      )
                     ],
                   ),
                   const Padding(
@@ -401,6 +458,21 @@ class _AccountDetails extends State<AccountDetails> {
                       ),
                     ),
                   ),
+                  editContactInfo
+                  ?
+                  SizedBox(
+                    width: 250,
+                    child: TextField(
+                      cursorColor: const Color(0xFF161C39),
+                      controller: email,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
+                      )
+                    ),
+                  )
+                  :
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
@@ -423,6 +495,21 @@ class _AccountDetails extends State<AccountDetails> {
                       ),
                     ),
                   ),
+                  editContactInfo
+                  ?
+                  SizedBox(
+                    width: 250,
+                    child: TextField(
+                      cursorColor: const Color(0xFF161C39),
+                      controller: phone,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF161C39)
+                      )
+                    ),
+                  )
+                  :
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
@@ -437,7 +524,7 @@ class _AccountDetails extends State<AccountDetails> {
                   const Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "How would you like us to infrom\nyou of booked appointments?",
+                      "How would you like us to inform you of booked appointments?",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
@@ -593,7 +680,7 @@ class _AccountDetails extends State<AccountDetails> {
                   const Padding(
                     padding: EdgeInsets.only(top:10.0),
                     child: Text(
-                      "*We use your bank information to send you\npayment when patients book appointments\nat your practice.",
+                      "*We use your bank information to send you payment when patients book appointments at your practice.",
                       softWrap: true,
                       maxLines: 3,
                       style: TextStyle(
@@ -605,13 +692,16 @@ class _AccountDetails extends State<AccountDetails> {
                   ),
                 ],
               ),
-              Container(
-                child: Text(""),
+
+              const SizedBox(
+                height: 0,
+                width: 0,
               ),
+
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerRight,
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor:const MaterialStatePropertyAll<Color>(Color(0xFF161C39)),
@@ -632,8 +722,6 @@ class _AccountDetails extends State<AccountDetails> {
               )
             ]
           ),
-        ],
-      ),
     );
   }
 }
