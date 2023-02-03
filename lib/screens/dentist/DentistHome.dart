@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notch_dental/screens/dentist/AccountDetails.dart';
-import 'package:notch_dental/screens/dentist/MyAppointments.dart';
+import 'package:notch_dental/screens/dentist/Appointments.dart';
 import 'package:notch_dental/screens/dentist/Notifications.dart';
 
 class DentistHome extends StatefulWidget {
@@ -15,7 +15,7 @@ class _DentistHome extends State<DentistHome> {
   int selectedMenuOption = 0;
 
   var menuItemWeights = [FontWeight.w400,FontWeight.w400,FontWeight.w400];
-  List<Widget> widgets = [AccountDetails(), MyAppointments(), Notifications()];
+  List<Widget> widgets = [AccountDetails(), Appointments(), Notifications()];
 
   @override
   initState() {
