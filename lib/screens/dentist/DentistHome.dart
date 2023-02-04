@@ -12,13 +12,14 @@ class DentistHome extends StatefulWidget {
 
 class _DentistHome extends State<DentistHome> {
 
-  int selectedMenuOption = 0;
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
+  int selectedMenuOption = 0;
   var menuItemWeights = [FontWeight.w400,FontWeight.w400,FontWeight.w400];
-  List<Widget> widgets = [AccountDetails(), Appointments(), Notifications()];
 
   @override
   initState() {
+    super.initState();
     setFontWeights();
   }
 
@@ -79,39 +80,41 @@ class _DentistHome extends State<DentistHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 54),
+                      padding: const EdgeInsets.only(left: 40, top: 54),
+                      child: TextButton(
+                        onPressed: (){
+                          setState(() {
+                            selectedMenuOption = 0;
+                            setFontWeights();
+                            _navigatorKey.currentState!.pushNamed("/dashboard");
+                          });
+                        },
+                        child: Text(
+                          "My Appointments",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: menuItemWeights[0],
+                              color: const Color(0xFF161C39)
+                          ),
+                        ),
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40, top: 39),
                     child: TextButton(
                       onPressed: (){
                         setState(() {
-                          selectedMenuOption = 0;
+                          selectedMenuOption = 1;
                           setFontWeights();
+                          _navigatorKey.currentState!.pushNamed("/account");
                         });
                       },
                       child: Text(
                         "Account Details",
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: menuItemWeights[0],
-                          color: Color(0xFF161C39)
-                        ),
-                      ),
-                    )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 40, top: 39),
-                    child: TextButton(
-                      onPressed: (){
-                        setState(() {
-                          selectedMenuOption = 1;
-                          setFontWeights();
-                        });
-                      },
-                      child: Text(
-                        "My Appointments",
-                        style: TextStyle(
-                          fontSize: 20,
                           fontWeight: menuItemWeights[1],
-                          color: const Color(0xFF161C39)
+                          color: Color(0xFF161C39)
                         ),
                       ),
                     )
@@ -123,6 +126,7 @@ class _DentistHome extends State<DentistHome> {
                         setState(() {
                           selectedMenuOption = 2;
                           setFontWeights();
+                          _navigatorKey.currentState!.pushNamed("/notifications");
                         });
                       },
                       child: Text(
@@ -142,8 +146,38 @@ class _DentistHome extends State<DentistHome> {
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(40, 30, 40, 2),
-                child:widgets[selectedMenuOption]
-
+                child: Navigator(
+                  initialRoute: '/dashboard',
+                  key: _navigatorKey,
+                  onUnknownRoute: (settings) {
+                    return MaterialPageRoute<void>(
+                      settings: settings,
+                      builder: (BuildContext context) {
+                        Navigator.pop(context);
+                        return const Scaffold(body: Center(child: Text('Not Found'))); // This should never really be seen.
+                      },
+                    );
+                  },
+                  onGenerateRoute: (RouteSettings settings) {
+                    WidgetBuilder builder;
+                    switch (settings.name) {
+                      case '/':
+                      case '/dashboard':
+                        builder = (BuildContext context) => Appointments();
+                        break;
+                      case '/account':
+                        builder = (BuildContext context) =>  AccountDetails();
+                        break;
+                      case '/notifications':
+                        builder = (BuildContext context) =>  Notifications();
+                        break;
+                      default:
+                        throw Exception('Invalid route: ${settings.name}');
+                    }
+                    print("Navigation to ${settings.name}");
+                    return MaterialPageRoute<void>(builder: builder, settings: settings);
+                  },
+                ),
               ),
             ),
           ]

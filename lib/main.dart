@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: "/",
       title: 'Notch Dental',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         '/':(context) =>LandingPage(),
         '/dentist-login':(context) =>DentistLogin(),
         '/dentist-signup':(context) =>DentistSignup(),
-        '/dentist-home':(context) =>DentistHome(),
+        '/dashboard':(context) =>DentistHome(),
         '/login':(context) =>Login(),
         '/signup':(context) =>Signup(),
         '/failed-authentication':(context) =>FailedAuthentication(),

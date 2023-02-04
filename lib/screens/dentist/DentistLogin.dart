@@ -29,7 +29,7 @@ class DentistLogin extends StatelessWidget {
                 ElevatedButton(
                     onPressed: ()=>{
                       if(dbFunctions().authenticateDentist(username, password)){
-                        Navigator.pushNamed(context, "/dentist-home")
+                        Navigator.pushNamed(context, "/dashboard")
                       }else{
                         Navigator.pushNamed(context, "/failed-authentication")
                       }
