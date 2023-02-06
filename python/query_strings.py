@@ -29,3 +29,7 @@ insert_appointment = (
     """INSERT INTO appointment (time, listed_price, full_price, filled, practice_id, patient_id, service_id)
     VALUES (\'"""
 )
+
+get_pass_hash_from_email = "SELECT password FROM dental_practice WHERE email = \'"
+
+check_if_email_exists = "SELECT exists (SELECT 1 FROM dental_practice WHERE email = \'{email}\' LIMIT 1)"

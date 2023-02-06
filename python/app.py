@@ -70,6 +70,9 @@ def registerPatient():
 def registerPractice():
     print("Entered Register Practice")
     data = request.get_json()
+    print("About to check for email")
+    if EmailExists(data["email"]) == True:
+        return Response("Email exists in Database- please use another")
     password = GenerateHash(data["password"])
     print("Hashed Password = " + password)
     filled_query = query_strings.insert_practice + data["email"] + "\', \'" + password + "\', \'" + data["name"] + "\', \'" + data["address1"] + "\', \'" + data["address2"] + "\', \'" + data["city"] + "\', \'" + data["state"] + "\', \'" + data["zip"] + "\') RETURNING id;"
@@ -91,12 +94,19 @@ def home():
 @app.get("/login")
 def Login():
     data = request.get_json()
-    query = "SELECT password FROM dental_practice WHERE id = " + str(data["id"]) + ';'
+    query = query_strings.get_pass_hash_from_email + data["email"] + '\';'
     returnData = sendGetRequest([query])
     returnInfo = {"password" : returnData[1][0]}
     verifyResult = VerifyHash(data["password"], returnInfo.get("password"))
     resp = Response("Verification Result = " + json.dumps(verifyResult))
     return resp
+
+def EmailExists(input_email):
+    check_query = query_strings.check_if_email_exists.format(email = input_email)
+    print("Query = " + check_query)
+    email_exists_result = sendGetRequest([check_query])
+    emailExists = email_exists_result[1][0]
+    return emailExists
 
 def GenerateHash(input_pass):
     return hasher.hash(input_pass)
