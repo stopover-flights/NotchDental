@@ -4,6 +4,7 @@ import query_strings
 import psycopg2
 from dotenv import load_dotenv
 from flask import Flask, request, Response
+from passlib.hash import bcrypt
 
 load_dotenv()
 
@@ -11,6 +12,8 @@ url = os.getenv("DATABASE_URL")
 connection = psycopg2.connect(url)
 
 app = Flask(__name__)
+
+hasher = bcrypt.using(rounds=13)
 
 def sendPostRequest(queries, hasReturn):
     with connection:
@@ -21,32 +24,25 @@ def sendPostRequest(queries, hasReturn):
                 id = cursor.fetchone()[0]
                 resp = Response("ID = " + str(id))
             else:
-
                 resp = Response("Success!")
         return resp
     
 def sendGetRequest(queries):
-    print("Entering sendGetRequest")
     with connection:
         with connection.cursor() as cursor:
             for query in queries:
                 cursor.execute(query)
                 return_data = cursor.fetchone()
-                print("Return Data Below:")
-                print(return_data)
                 resp = Response(return_data)
         return [resp, return_data]
 
 @app.get("/get-practice-info")
 def getPracticeInfo():
     query = "SELECT id, email, name, address1, address2, city, state, zip FROM dental_practice WHERE id = " + str(request.get_json()["practice_id"]) + ';'
-    print("Query = " + query)
     returnData = sendGetRequest([query])
-    print("Return data is of type:")
-    print(type(returnData[1]))
     returnInfo = {"id" : returnData[1][0], "email" : returnData[1][1], "name": returnData[1][2], "address1": returnData[1][3], "address2": returnData[1][4], "city": returnData[1][5], "state":returnData[1][6], "zip": returnData[1][7]}
-    print("Return info = " + str(returnInfo))
-    return Response(json.dumps(returnInfo, indent = 4))
+    resp = Response(json.dumps(returnInfo, indent = 4))
+    return resp
     
 @app.post("/fill-appointment")
 def fillAppointment():
@@ -60,7 +56,6 @@ def createAppointment():
     print("Entered create appointment")
     data = request.get_json()
     filled_query = query_strings.insert_appointment + data["time"] + "\', \'" + str(data["listed_price"]) + "\', \'" + str(data["full_price"]) + "\', \'" + str(data["filled"]) + "\', \'" + str(data["practice_id"]) + "\', \'" + str(data["patient_id"]) + "\', \'" + str(data["service_id"])  + "\') RETURNING id;"
-    print("filled appointment query = " + filled_query)
     return sendPostRequest([query_strings.create_appointment_table, filled_query], True)
 
 @app.post("/register-patient")
@@ -75,7 +70,9 @@ def registerPatient():
 def registerPractice():
     print("Entered Register Practice")
     data = request.get_json()
-    filled_query = query_strings.insert_practice + data["email"] + "\', \'" + data["password"] + "\', \'" + data["name"] + "\', \'" + data["address1"] + "\', \'" + data["address2"] + "\', \'" + data["city"] + "\', \'" + data["state"] + "\', \'" + data["zip"] + "\') RETURNING id;"
+    password = GenerateHash(data["password"])
+    print("Hashed Password = " + password)
+    filled_query = query_strings.insert_practice + data["email"] + "\', \'" + password + "\', \'" + data["name"] + "\', \'" + data["address1"] + "\', \'" + data["address2"] + "\', \'" + data["city"] + "\', \'" + data["state"] + "\', \'" + data["zip"] + "\') RETURNING id;"
     print("Filled query = " + filled_query)
     return sendPostRequest([query_strings.create_practice_table, filled_query], True)
 
@@ -91,3 +88,18 @@ def createService():
 def home():
     return "Hello world!"
 
+@app.get("/login")
+def Login():
+    data = request.get_json()
+    query = "SELECT password FROM dental_practice WHERE id = " + str(data["id"]) + ';'
+    returnData = sendGetRequest([query])
+    returnInfo = {"password" : returnData[1][0]}
+    verifyResult = VerifyHash(data["password"], returnInfo.get("password"))
+    resp = Response("Verification Result = " + json.dumps(verifyResult))
+    return resp
+
+def GenerateHash(input_pass):
+    return hasher.hash(input_pass)
+    
+def VerifyHash(input_pass, db_pass):
+    return hasher.verify(input_pass, db_pass)
