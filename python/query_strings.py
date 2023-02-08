@@ -21,7 +21,7 @@ insert_practice = ("""INSERT INTO dental_practice
 (email, password, name, address1, address2, city, state, zip)
 VALUES (\'""")
                    
-insert_service = "INSERT INTO service (name) VALUES (\'"
+insert_service = "INSERT INTO service (name) VALUES (\'{name}\') RETURNING id;"
 
 insert_patient = "INSERT INTO patient (first_name, last_name, zip, email, password, phone_number) VALUES (\'"
 
@@ -30,6 +30,10 @@ insert_appointment = (
     VALUES (\'"""
 )
 
-get_pass_hash_from_email = "SELECT password FROM dental_practice WHERE email = \'"
+get_pass_hash_from_email = "SELECT password FROM dental_practice WHERE email = \'{email}\';"
 
 check_if_email_exists = "SELECT exists (SELECT 1 FROM dental_practice WHERE email = \'{email}\' LIMIT 1)"
+
+update_password = "UPDATE dental_practice SET password = \'{password}\' WHERE id = {id};"
+
+get_practice_info = "SELECT id, email, name, address1, address2, city, state, zip FROM dental_practice WHERE id = {id};"

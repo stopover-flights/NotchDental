@@ -38,7 +38,7 @@ def sendGetRequest(queries):
 
 @app.get("/get-practice-info")
 def getPracticeInfo():
-    query = "SELECT id, email, name, address1, address2, city, state, zip FROM dental_practice WHERE id = " + str(request.get_json()["practice_id"]) + ';'
+    query = query_strings.get_practice_info.format(id = request.get_json()["practice_id"])
     returnData = sendGetRequest([query])
     returnInfo = {"id" : returnData[1][0], "email" : returnData[1][1], "name": returnData[1][2], "address1": returnData[1][3], "address2": returnData[1][4], "city": returnData[1][5], "state":returnData[1][6], "zip": returnData[1][7]}
     resp = Response(json.dumps(returnInfo, indent = 4))
@@ -79,12 +79,21 @@ def registerPractice():
     print("Filled query = " + filled_query)
     return sendPostRequest([query_strings.create_practice_table, filled_query], True)
 
+@app.post("/reset-password")
+def ResetPassword():
+    print("Entering Reset Password")
+    data = request.get_json()
+    new_pass_hashed = GenerateHash(data["new_password"])
+    filled_query = query_strings.update_password.format(password = new_pass_hashed, id = data["id"])
+    print("Filled Query = " + filled_query)
+    return sendPostRequest([filled_query], False)
+
 @app.post("/create-service")
 def createService():
     print("Entered Create Service")
     data = request.get_json()
     name = data["name"]
-    filled_query = query_strings.insert_service + name + "\') RETURNING id;"
+    filled_query = query_strings.insert_service.format(name = data["name"])
     return sendPostRequest([query_strings.create_service_table, filled_query], True)
 
 @app.get("/")
@@ -94,7 +103,7 @@ def home():
 @app.get("/login")
 def Login():
     data = request.get_json()
-    query = query_strings.get_pass_hash_from_email + data["email"] + '\';'
+    query = query_strings.get_pass_hash_from_email.format(email = data["email"])
     returnData = sendGetRequest([query])
     returnInfo = {"password" : returnData[1][0]}
     verifyResult = VerifyHash(data["password"], returnInfo.get("password"))
