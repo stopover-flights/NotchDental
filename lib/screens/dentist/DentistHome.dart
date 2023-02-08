@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notch_dental/screens/dentist/AccountDetails.dart';
 import 'package:notch_dental/screens/dentist/Appointments.dart';
+import 'package:notch_dental/screens/dentist/NewAppointment.dart';
 import 'package:notch_dental/screens/dentist/Notifications.dart';
 
 class DentistHome extends StatefulWidget {
@@ -147,6 +148,7 @@ class _DentistHome extends State<DentistHome> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(40, 30, 40, 2),
                 child: Navigator(
+                  reportsRouteUpdateToEngine: true,
                   initialRoute: '/dashboard',
                   key: _navigatorKey,
                   onUnknownRoute: (settings) {
@@ -171,11 +173,14 @@ class _DentistHome extends State<DentistHome> {
                       case '/notifications':
                         builder = (BuildContext context) =>  Notifications();
                         break;
+                      case '/dashboard/new':
+                        builder = (BuildContext context) =>  NewAppointment();
+                        break;
                       default:
                         throw Exception('Invalid route: ${settings.name}');
                     }
-                    print("Navigation to ${settings.name}");
-                    return MaterialPageRoute<void>(builder: builder, settings: settings);
+                    print("Navigation to ${settings}");
+                    return CustomPageRoute(builder: builder, settings: settings);
                   },
                 ),
               ),
@@ -184,4 +189,10 @@ class _DentistHome extends State<DentistHome> {
         )
     );
   }
+}
+class CustomPageRoute extends MaterialPageRoute {
+  @override
+  Duration get transitionDuration => const Duration(seconds: 0);
+
+  CustomPageRoute({builder, settings}) : super(builder: builder, settings: settings);
 }

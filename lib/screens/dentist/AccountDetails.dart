@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:notch_dental/models/office.dart';
@@ -64,8 +63,6 @@ class _AccountDetails extends State<AccountDetails> {
               //ACCOUNT INFO
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
-                //direction: Axis.vertical,
                 children: [
                   Row(
                     mainAxisSize: MainAxisSize.min,

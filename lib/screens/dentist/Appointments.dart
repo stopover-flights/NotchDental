@@ -78,8 +78,8 @@ class _Appointments extends State<Appointments> {
                           )
                       ),
 
-                      onPressed: ()=>{
-
+                      onPressed: (){
+                        Navigator.pushReplacementNamed(context, "/dashboard/new");
                       },
                       child: const Text("Set Appointments",style: TextStyle(color: Colors.white),)
                   ),
