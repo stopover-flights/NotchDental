@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:notch_dental/models/appointment.dart';
-import 'package:notch_dental/screens/dentist/DentistLogin.dart';
-import 'package:notch_dental/screens/customer/PatientLogin.dart';
 import 'package:notch_dental/screens/widgets/AppointmentListViewItem.dart';
 
 class Appointments extends StatefulWidget{
@@ -14,17 +12,15 @@ class Appointments extends StatefulWidget{
 
 class _Appointments extends State<Appointments> {
   Appointment a = Appointment(id: "12", time: DateTime.now(), listedPrice: 21.1, fullPrice: 55.0, filled: false);
-  var stringDate = DateFormat.yMMMMd().format(DateTime.now());
+  var date = DateTime.now();
+  String stringDate = DateFormat.yMMMMd().format(DateTime.now());
   List<Appointment> appointments =[];
-  List<Widget> views = [
-
-  ];
 
   @override
   void initState() {
-
     appointments.add(a);
     appointments.add(a);
+    
     //TODO: fetch appointments and insert into appointments list
 
     super.initState();
@@ -53,17 +49,34 @@ class _Appointments extends State<Appointments> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
+                    width: 240,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1),
                       //shape: BoxShape.circle,
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //arrow_forward_ios_rounded
-                        IconButton(onPressed: (){}, icon: const Icon(IconData(0xf571, fontFamily: 'MaterialIcons', matchTextDirection: true))),
+                        IconButton(
+                            onPressed: (){
+                              setState(() {
+                                date = date.subtract(const Duration(days: 1));
+                                stringDate = DateFormat.yMMMMd().format(date);
+                              });
+                            },
+                            icon: const Icon(IconData(0xf571, fontFamily: 'MaterialIcons', matchTextDirection: true))
+                        ),
                         Text(stringDate),
-                        IconButton(onPressed: (){}, icon: const Icon(IconData(0xf579, fontFamily: 'MaterialIcons', matchTextDirection: false)))
+                        IconButton(
+                            onPressed: (){
+                              setState(() {
+                                date = date.add(const Duration(days: 1));
+                                stringDate = DateFormat.yMMMMd().format(date);
+                              });
+                            },
+                            icon: const Icon(IconData(0xf579, fontFamily: 'MaterialIcons', matchTextDirection: false))
+                        )
                       ],
                     ),
                   ),

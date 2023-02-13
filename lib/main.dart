@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/dashboard",
+      initialRoute: "/",
       title: 'Notch Dental',
       theme: ThemeData(
         primarySwatch: Colors.blue,

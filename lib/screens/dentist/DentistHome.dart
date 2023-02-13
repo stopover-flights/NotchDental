@@ -115,7 +115,7 @@ class _DentistHome extends State<DentistHome> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: menuItemWeights[1],
-                          color: Color(0xFF161C39)
+                          color: const Color(0xFF161C39)
                         ),
                       ),
                     )
@@ -149,7 +149,7 @@ class _DentistHome extends State<DentistHome> {
                 padding: const EdgeInsets.fromLTRB(40, 30, 40, 2),
                 child: Navigator(
                   reportsRouteUpdateToEngine: true,
-                  initialRoute: '/dashboard',
+                  initialRoute: '/',
                   key: _navigatorKey,
                   onUnknownRoute: (settings) {
                     return MaterialPageRoute<void>(
@@ -165,13 +165,13 @@ class _DentistHome extends State<DentistHome> {
                     switch (settings.name) {
                       case '/':
                       case '/dashboard':
-                        builder = (BuildContext context) => Appointments();
+                        builder = (BuildContext context) => const Appointments();
                         break;
                       case '/account':
-                        builder = (BuildContext context) =>  AccountDetails();
+                        builder = (BuildContext context) =>  const AccountDetails();
                         break;
                       case '/notifications':
-                        builder = (BuildContext context) =>  Notifications();
+                        builder = (BuildContext context) =>  const Notifications();
                         break;
                       case '/dashboard/new':
                         builder = (BuildContext context) =>  NewAppointment();

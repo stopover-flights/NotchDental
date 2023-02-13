@@ -13,8 +13,15 @@ class NewAppointment extends StatefulWidget {
 }
 
 class _NewAppointment extends State<NewAppointment> {
-
+  var date = DateTime.now();
+  var stringDate = DateFormat.yMMMMd().format(DateTime.now());
   var amPm = "AM";
+
+  FocusNode minutesNode = FocusNode();
+  FocusNode hoursNode = FocusNode();
+
+  TextEditingController hours = TextEditingController();
+  TextEditingController minutes = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +29,11 @@ class _NewAppointment extends State<NewAppointment> {
     var appointment;
     double totalAppointmentValue = 150.0;//todo:get from database
     var fifteenPercent = double.parse((totalAppointmentValue*0.85).toStringAsFixed(2));
+    bool fifteen = false;
     var twentyPercent = double.parse((totalAppointmentValue*0.80).toStringAsFixed(2));
-    //var twentyfivePercent = double.parse((totalAppointmentValue*0.75).toStringAsFixed(2));
+    bool twenty = false;
     var thirtyPercent = double.parse((totalAppointmentValue*0.70).toStringAsFixed(2));
+    bool thirty = false;
 
 
     if(args!=null){
@@ -32,19 +41,14 @@ class _NewAppointment extends State<NewAppointment> {
     }
     TextEditingController _txtTimeController = TextEditingController();
 
-    var stringDate = DateFormat.yMMMMd().format(DateTime.now());
 
-    FocusNode minutesNode = FocusNode();
-    FocusNode hoursNode = FocusNode();
-
-    TextEditingController hours = TextEditingController();
-    TextEditingController minutes = TextEditingController();
 
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+
         const Text(
           "Time",
           style: TextStyle(
@@ -65,16 +69,34 @@ class _NewAppointment extends State<NewAppointment> {
                 //shape: BoxShape.circle,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //arrow_forward_ios_rounded
-                  IconButton(onPressed: (){}, icon: const Icon(IconData(0xf571, fontFamily: 'MaterialIcons', matchTextDirection: true))),
+                  IconButton(
+                      onPressed: (){
+                        setState(() {
+                          date = date.subtract(const Duration(days: 1));
+                          stringDate = DateFormat.yMMMMd().format(date);
+                        });
+                      },
+                      icon: const Icon(IconData(0xf571, fontFamily: 'MaterialIcons', matchTextDirection: true))
+                  ),
                   Text(stringDate),
-                  IconButton(onPressed: (){}, icon: const Icon(IconData(0xf579, fontFamily: 'MaterialIcons', matchTextDirection: false)))
+                  IconButton(
+                      onPressed: (){
+                        setState(() {
+                          date = date.add(const Duration(days: 1));
+                          stringDate = DateFormat.yMMMMd().format(date);
+                        });
+                      },
+                      icon: const Icon(IconData(0xf579, fontFamily: 'MaterialIcons', matchTextDirection: false))
+                  )
                 ],
               ),
             ),
-            SizedBox(width: 30),
+
+            const SizedBox(width: 30),
+
             Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1)
@@ -111,6 +133,9 @@ class _NewAppointment extends State<NewAppointment> {
                           }else if(text.length==2){
                             minutesNode.requestFocus();
                           }
+                          setState(() {
+                            hours.text=text;
+                          });
                         },
                         cursorColor: const Color(0xFF161C39),
                         backgroundCursorColor: const Color(0xFFFFFFFF),
@@ -132,7 +157,7 @@ class _NewAppointment extends State<NewAppointment> {
                       width: 30,
                       height: 27,
                       child: EditableText(
-                        forceLine: true,
+                        //forceLine: true,
                         textHeightBehavior: const TextHeightBehavior(
                           applyHeightToFirstAscent:false,
                           applyHeightToLastDescent: false,
@@ -152,6 +177,9 @@ class _NewAppointment extends State<NewAppointment> {
                           }else if(text.length==2){
                             minutesNode.unfocus();
                           }
+                          setState(() {
+                            minutes.text=text;
+                          });
                         },
                         cursorColor: const Color(0xFF161C39),
                         backgroundCursorColor: const Color(0xFFFFFFFF),
@@ -161,7 +189,8 @@ class _NewAppointment extends State<NewAppointment> {
                 ],
               ),
             ),
-            SizedBox(width: 4),
+            const SizedBox(width: 4),
+
             Container(
               width: 60,
               height: 38,
@@ -253,7 +282,7 @@ class _NewAppointment extends State<NewAppointment> {
           children: [
             ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    backgroundColor: fifteen ? MaterialStateProperty.all(Color(0xFF161C39)) : MaterialStateProperty.all(Colors.white),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
@@ -261,20 +290,26 @@ class _NewAppointment extends State<NewAppointment> {
                         )
                     )
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  setState(() {
+                    fifteen = true;
+                  });
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "15% (\$$fifteenPercent)",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF161C39)
+                        color: fifteen ? Color(0xFFFFFFFF) : Color(0xFF161C39)
                     ),
                   ),
                 )
             ),
-            SizedBox(width: 20),
+
+            const SizedBox(width: 20),
+
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -298,14 +333,9 @@ class _NewAppointment extends State<NewAppointment> {
                   ),
                 )
             ),
-            /*SizedBox(),
-            OutlinedButton(
-                onPressed: (){},
-                child: Text(
-                    "25% (\$$twentyfivePercent)"
-                )
-            ),*/
-            SizedBox(width: 20),
+
+            const SizedBox(width: 20),
+
             ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.white),
