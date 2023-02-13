@@ -136,6 +136,7 @@ class _NewAppointment extends State<NewAppointment> {
                           setState(() {
                             hours.text=text;
                           });
+                          hours.selection = TextSelection.fromPosition(TextPosition(offset: hours.text.length));
                         },
                         cursorColor: const Color(0xFF161C39),
                         backgroundCursorColor: const Color(0xFFFFFFFF),
@@ -157,14 +158,14 @@ class _NewAppointment extends State<NewAppointment> {
                       width: 30,
                       height: 27,
                       child: EditableText(
-                        //forceLine: true,
+                        forceLine: true,
                         textHeightBehavior: const TextHeightBehavior(
                           applyHeightToFirstAscent:false,
                           applyHeightToLastDescent: false,
                         ),
                         controller: minutes,
                         focusNode: minutesNode,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 15,
                           height: 2,
@@ -180,6 +181,7 @@ class _NewAppointment extends State<NewAppointment> {
                           setState(() {
                             minutes.text=text;
                           });
+                          minutes.selection = TextSelection.fromPosition(TextPosition(offset: minutes.text.length));
                         },
                         cursorColor: const Color(0xFF161C39),
                         backgroundCursorColor: const Color(0xFFFFFFFF),
