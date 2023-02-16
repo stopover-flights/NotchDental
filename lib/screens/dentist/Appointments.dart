@@ -49,7 +49,8 @@ class _Appointments extends State<Appointments> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 240,
+                    height: 38,
+                    width: 248,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1),
                       //shape: BoxShape.circle,
