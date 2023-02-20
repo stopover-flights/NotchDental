@@ -10,6 +10,8 @@ class NewAppointment extends StatefulWidget {
 }
 
 class _NewAppointment extends State<NewAppointment> {
+  var appointment;
+
   var date = DateTime.now();
   var stringDate = DateFormat.yMMMMd().format(DateTime.now());
   var amPm = "AM";
@@ -50,7 +52,27 @@ class _NewAppointment extends State<NewAppointment> {
   @override
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context)!.settings.arguments;
-    var appointment;
+
+    if(args!=null){
+      appointment = args as Appointment;
+      totalAppointmentValue = appointment.fullPrice;
+      standardDiscount = appointment.percentDiscount;
+      dollarPrice = appointment.listedPrice;
+      firstBuild=false;
+      DateTime datetime = appointment.dateTime;
+      dollarDiscount.text = appointment.listedPrice.toString();
+      percentDiscount.text = appointment.percentDiscount.toString();
+      minutes.text = datetime.minute.toString();
+      if(datetime.hour>12){
+        hours.text = (datetime.hour-12).toString();
+        amPm="PM";
+      }else{
+        hours.text = datetime.hour.toString();
+      }
+
+    }
+
+    /*
     if(firstBuild){
       dollarDiscount.text = (totalAppointmentValue*(100-standardDiscount)/100).toStringAsFixed(2);
       percentDiscount.text = standardDiscount.toStringAsFixed(0);
@@ -62,10 +84,7 @@ class _NewAppointment extends State<NewAppointment> {
       editingDollars = false;
       percentDiscount.text = (100-(dollarPrice/totalAppointmentValue*100)).toStringAsFixed(0);
     }
-
-    if(args!=null){
-      appointment = args as Appointment;
-    }
+    */
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

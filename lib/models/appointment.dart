@@ -3,8 +3,9 @@ import 'dart:convert';
 
 class Appointment {
   late var id;
-  late DateTime time;
+  late DateTime dateTime;
   late double listedPrice;
+  late double percentDiscount;
   late double fullPrice;
   late bool filled;
   late var serviceOfferedId;
@@ -13,8 +14,9 @@ class Appointment {
 
   Appointment ({
     required this.id,
-    required this.time,
+    required this.dateTime,
     required this.listedPrice,
+    required this.percentDiscount,
     required this.fullPrice,
     required this.filled,
     this.serviceOfferedId,
@@ -22,11 +24,12 @@ class Appointment {
     this.patientFilledId
   });
 
-  void appointmentFromDatabase(var id, var time, var listedPrice, var fullPrice, var filled, var serviceOfferedId, var officeId, var patientFilledId){
+  void appointmentFromDatabase(var id, var dateTime, var listedPrice, var percentDiscount, var fullPrice, var filled, var serviceOfferedId, var officeId, var patientFilledId){
       this.id = id;
-      this.time = DateTime.parse(time);
+      this.dateTime = DateTime.parse(dateTime);
       this.listedPrice = double.parse(listedPrice);
       this.fullPrice = double.parse(fullPrice);
+      this.percentDiscount = double.parse(percentDiscount);
       if(filled.toLowerCase()=="true"){
         this.filled = true;
       }else{

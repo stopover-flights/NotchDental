@@ -18,6 +18,7 @@ RUN flutter doctor -v
 RUN flutter channel master
 RUN flutter upgrade
 RUN flutter config --enable-web
+RUN flutter pub get
 
 # Copy files to container and build
 RUN mkdir /app/

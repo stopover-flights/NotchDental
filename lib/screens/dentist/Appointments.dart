@@ -11,7 +11,7 @@ class Appointments extends StatefulWidget{
 }
 
 class _Appointments extends State<Appointments> {
-  Appointment a = Appointment(id: "12", time: DateTime.now(), listedPrice: 21.1, fullPrice: 55.0, filled: false);
+  Appointment a = Appointment(id: "12", dateTime: DateTime.now(), listedPrice: 21.1, percentDiscount: 30.0, fullPrice: 55.0, filled: false);
   var date = DateTime.now();
   String stringDate = DateFormat.yMMMMd().format(DateTime.now());
   List<Appointment> appointments =[];
