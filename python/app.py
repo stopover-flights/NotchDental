@@ -119,30 +119,41 @@ def create_app():
     def updatePracticeEmail():
         print("Entered update practice email")
         data = request.get_json()
-        print("Type of id: " + str(type(data["id"])))
         filled_query = update_query_strings.update_practice_email.format(email = data["email"], id = str(data["id"]))
-        print("Filled query = " +filled_query)
+        print("Filled query = " + filled_query)
         return PostToDB({filled_query}, False)
         
-    
     @app.put("/update-practice-password")
     def updatePracticePassword():
         print("Entering update practice password")
         data = request.get_json()
-        #check that current pass is correct
-
-        pass_result = CheckDBPass(data["email"], data["password"])
-        if(pass_result is False):
-            return Response("Incorrect password- please try again")
-        print("Pass result = " + str(pass_result))
-
-        #generate hash for new pass
+        #pass_result = CheckDBPass(data["email"], data["password"])
+        #if(pass_result is False):
+            #return Response("Incorrect password- please try again")
+        #print("Pass result = " + str(pass_result))
         filled_query = update_query_strings.update_practice_password.format(hashed_pass = str(GenerateHash(data["new_password"])), id = data["id"])
         return PostToDB({filled_query}, False)
-        #set new pass in DB
-
-        #return
-        return Response()
+    
+    @app.put("/update-practice-name")
+    def updatePracticeName():
+        print("Entered update practice name")
+        data = request.get_json()
+        filled_query = update_query_strings.update_practice_name.format(name = data["name"], id = str(data["id"]))
+        print("Filled query = " + filled_query)
+        return PostToDB({filled_query}, False)
+    
+    @app.put("/update-practice-address")
+    def updatePracticeAddress():
+        print("Entered update practice name")
+        data = request.get_json()
+        filled_query = update_query_strings.update_practice_address.format(address1 = data["address1"],
+                                                                           address2 = data["address2"],
+                                                                           city = data["city"],
+                                                                           state = data["state"],
+                                                                           zip = data["zip"],
+                                                                           id = data["id"])
+        print("Filled query = " + filled_query)
+        return PostToDB({filled_query}, False)
 
     def EmailExists(input_email):
         check_query = query_strings.check_if_email_exists.format(email = input_email)
