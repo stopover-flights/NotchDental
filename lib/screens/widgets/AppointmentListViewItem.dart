@@ -16,10 +16,10 @@ class AppointmentListViewItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(DateFormat.jm().format(appointment.dateTime), style: const TextStyle(color: Color(0xFF161C39), fontWeight: FontWeight.w700, fontSize: 20),),
+                Text(DateFormat.jm().format(appointment.dateTime!), style: const TextStyle(color: Color(0xFF161C39), fontWeight: FontWeight.w700, fontSize: 20),),
                 Text("\$${appointment.listedPrice}", style: const TextStyle(color: Color(0xFF161C39), fontWeight: FontWeight.w700, fontSize: 20)),
                 Text(
-                    "Regaining ${(appointment.listedPrice/appointment.fullPrice*100).toInt()}% Revenue",
+                    "Regaining ${(appointment.listedPrice!/appointment.fullPrice!*100).toInt()}% Revenue",
                     style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w300,

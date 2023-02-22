@@ -2,15 +2,15 @@
 import 'dart:convert';
 
 class Appointment {
-  late var id;
-  late DateTime dateTime;
-  late double listedPrice;
-  late double percentDiscount;
-  late double fullPrice;
-  late bool filled;
-  late var serviceOfferedId;
-  late var officeId;
-  late var patientFilledId;
+  String? id;
+  DateTime dateTime;
+  double listedPrice;
+  double percentDiscount;
+  double fullPrice;
+  bool? filled;
+  String? serviceOfferedId;
+  String? officeId;
+  String? patientFilledId;
 
   Appointment ({
     required this.id,

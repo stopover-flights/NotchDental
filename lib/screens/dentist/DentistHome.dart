@@ -146,7 +146,8 @@ class _DentistHome extends State<DentistHome> {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 40, 2),
+                padding: const EdgeInsets.all(0),
+//                padding: const EdgeInsets.fromLTRB(40, 30, 40, 2),
                 child: Navigator(
                   reportsRouteUpdateToEngine: true,
                   initialRoute: '/',
@@ -165,7 +166,7 @@ class _DentistHome extends State<DentistHome> {
                     switch (settings.name) {
                       case '/':
                       case '/dashboard':
-                        builder = (BuildContext context) => const Appointments();
+                        builder = (BuildContext context) => Appointments();
                         break;
                       case '/account':
                         builder = (BuildContext context) =>  const AccountDetails();
