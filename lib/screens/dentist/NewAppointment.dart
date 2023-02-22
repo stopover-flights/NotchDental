@@ -12,6 +12,8 @@ class NewAppointment extends StatefulWidget {
 class _NewAppointment extends State<NewAppointment> {
   //TODO: get practice data
   late Appointment appointment;
+  int pricePosition = 0;
+  int discountPosition = 0;
 
   var stringDate = DateFormat.yMMMMd().format(DateTime.now());
   var amPm = "AM";
@@ -190,8 +192,8 @@ class _NewAppointment extends State<NewAppointment> {
 
     hours.selection = TextSelection.fromPosition(TextPosition(offset: hours.text.length));
     minutes.selection = TextSelection.fromPosition(TextPosition(offset: minutes.text.length));
-    percentDiscount.selection = TextSelection.fromPosition(TextPosition(offset: percentDiscount.text.length));
-    dollarDiscount.selection = TextSelection.fromPosition(TextPosition(offset: dollarDiscount.text.length));
+    percentDiscount.selection = TextSelection.fromPosition(TextPosition(offset: discountPosition));
+    dollarDiscount.selection = TextSelection.fromPosition(TextPosition(offset: pricePosition));
 
     return SingleChildScrollView(
       child:
@@ -477,6 +479,7 @@ class _NewAppointment extends State<NewAppointment> {
                                       onChanged: (text){
                                         setState(() {
                                           editingPercentage = true;
+                                          discountPosition=percentDiscount.selection.base.offset;
                                           appointment.percentDiscount = double.parse(text);
                                         });
                                       },
@@ -541,6 +544,7 @@ class _NewAppointment extends State<NewAppointment> {
                                     setState(() {
                                       editingDollars = true;
                                       appointment.listedPrice=double.parse(text);
+                                      pricePosition=dollarDiscount.selection.base.offset;
                                     });
                                 },
                               ),

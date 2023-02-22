@@ -102,26 +102,21 @@ class _Appointments extends State<Appointments> {
                 ),
 
                 appointments.isEmpty?
-                //Expanded(
-                  //child:
-                  Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    //height: double.infinity,
-                    child: const Text(
-                      "No Appointments Yet.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0x77161C39)
-                      ),
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  //height: double.infinity,
+                  child: const Text(
+                    "No Appointments Yet.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0x77161C39)
                     ),
-                  )
-                //)
+                  ),
+                )
                 :
-                //Expanded(
-                 //   child:
                 Padding(
                       padding: const EdgeInsets.only(top:40.0, bottom: 10.0),
                       child: Card(
