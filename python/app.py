@@ -172,6 +172,20 @@ def create_app():
                                                                            id = data["id"])
         print("Filled query = " + filled_query)
         return PostToDB({filled_query}, False)
+    
+    @app.put("/update-appointment")
+    def updateAppointment():
+        print("Entered update appointment")
+        data = request.get_json()
+        filled_query = update_query_strings.update_appointment.format(time = data["time"],
+                                                                      listed_price = data["listed_price"],
+                                                                      full_price = data["full_price"],
+                                                                      practice_id = data["practice_id"],
+                                                                      service_id = data["service_id"],
+                                                                      id = data["id"])
+        print("Filled query = " + filled_query)
+        return PostToDB({filled_query}, False)
+
 
     def EmailExists(input_email):
         check_query = misc_query_strings.check_if_email_exists.format(email = input_email)
@@ -202,7 +216,4 @@ def create_app():
             #print("Data type = " + str(type(object)) + " , Data = " + str(object))
         return serialized_appointments
                 
-            
-        
     return app
-

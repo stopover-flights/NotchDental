@@ -13,11 +13,9 @@ zip = \'{zip}\'
  WHERE id = {id};"""
 
 update_appointment = """UPDATE appointment SET 
- time = {time},
+ time = \'{time}\',
  listed_price = {listed_price},
- discount_price = {discount_price},
- filled = {filled},
+ full_price = {full_price},
  practice_id = {practice_id},
- patient_id = {patient_id},
  service_id = {service_id}
-  WHERE id = {id};"""
+WHERE id = {id};"""
