@@ -70,7 +70,7 @@ def create_app():
     
     @app.get("/get-practice-info")
     def getPracticeInfo():
-        query = misc_query_strings.get_practice_info.format(practice_id = request.get_json()["practice_id"])
+        query = get_query_strings.get_practice_info.format(practice_id = request.get_json()["practice_id"])
         returnData = GetFromDB({query})
         returnInfo = {"id" : returnData[1][0], "email" : returnData[1][1], "name": returnData[1][2], "address1": returnData[1][3], "address2": returnData[1][4], "city": returnData[1][5], "state":returnData[1][6], "zip": returnData[1][7]}
         resp = Response(json.dumps(returnInfo, indent = 4))
@@ -119,7 +119,7 @@ def create_app():
         print("Entering Reset Password")
         data = request.get_json()
         new_pass_hashed = GenerateHash(data["new_password"])
-        filled_query = misc_query_strings.update_password.format(password = new_pass_hashed, id = data["id"])
+        filled_query = update_query_strings.update_practice_password.format(password = new_pass_hashed, id = data["id"])
         print("Filled Query = " + filled_query)
         return PostToDB([filled_query], False)
 
@@ -133,11 +133,18 @@ def create_app():
     
     #PUT REQUESTS
 
-    @app.put("/update-practice-email")
-    def updatePracticeEmail():
-        print("Entered update practice email")
+    @app.put("/update-practice")
+    def updatePractice():
+        print("Entered update practice")
         data = request.get_json()
-        filled_query = update_query_strings.update_practice_email.format(email = data["email"], id = str(data["id"]))
+        filled_query = update_query_strings.update_practice.format(name = data["name"],
+                                                                           email = data["email"],
+                                                                           address1 = data["address1"],
+                                                                           address2 = data["address2"],
+                                                                           city = data["city"],
+                                                                           state = data["state"],
+                                                                           zip = data["zip"],
+                                                                           id = data["id"])
         print("Filled query = " + filled_query)
         return PostToDB({filled_query}, False)
         
@@ -150,27 +157,6 @@ def create_app():
             #return Response("Incorrect password- please try again")
         #print("Pass result = " + str(pass_result))
         filled_query = update_query_strings.update_practice_password.format(hashed_pass = str(GenerateHash(data["new_password"])), id = data["id"])
-        return PostToDB({filled_query}, False)
-    
-    @app.put("/update-practice-name")
-    def updatePracticeName():
-        print("Entered update practice name")
-        data = request.get_json()
-        filled_query = update_query_strings.update_practice_name.format(name = data["name"], id = str(data["id"]))
-        print("Filled query = " + filled_query)
-        return PostToDB({filled_query}, False)
-    
-    @app.put("/update-practice-address")
-    def updatePracticeAddress():
-        print("Entered update practice name")
-        data = request.get_json()
-        filled_query = update_query_strings.update_practice_address.format(address1 = data["address1"],
-                                                                           address2 = data["address2"],
-                                                                           city = data["city"],
-                                                                           state = data["state"],
-                                                                           zip = data["zip"],
-                                                                           id = data["id"])
-        print("Filled query = " + filled_query)
         return PostToDB({filled_query}, False)
     
     @app.put("/update-appointment")
