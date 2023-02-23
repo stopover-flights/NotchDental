@@ -88,8 +88,8 @@ def create_app():
     def createAppointment():
         #print("Entered create appointment")
         data = request.get_json()
-        filled_query = insert_query_strings.insert_appointment + data["time"] + "\', \'" + str(data["listed_price"]) + "\', \'" + str(data["full_price"]) + "\', false, \'" + str(data["practice_id"]) + "\', NULL, \'" + str(data["service_id"])  + "\') RETURNING id;"
-        #print(filled_query)
+        filled_query = insert_query_strings.insert_appointment + data["time"] + "\', \'" + str(data["listed_price"]) + "\', \'" + str(data["full_price"]) + "\', false, \'" + str(data["practice_id"]) + "\', NULL, \'" + str(data["service_id"])  + "\', true) RETURNING id;"
+        print(filled_query)
         return PostToDB([create_query_strings.create_appointment_table, filled_query], True)
 
     @app.post("/register-patient")

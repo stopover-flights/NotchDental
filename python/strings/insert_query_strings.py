@@ -7,6 +7,6 @@ insert_service = "INSERT INTO service (name) VALUES (\'{name}\') RETURNING id;"
 insert_patient = "INSERT INTO patient (first_name, last_name, zip, email, password, phone_number) VALUES (\'"
 
 insert_appointment = (
-    """INSERT INTO appointment (time, listed_price, full_price, filled, practice_id, patient_id, service_id)
+    """INSERT INTO appointment (time, listed_price, full_price, filled, practice_id, patient_id, service_id, is_active)
     VALUES (\'"""
 )
