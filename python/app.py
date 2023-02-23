@@ -62,7 +62,6 @@ def create_app():
         data = request.get_json()
         filled_query = get_query_strings.get_open_appointments.format(practice_id = data["practice_id"])
         return_data = GetFromDB({filled_query}, True)
-        print("Appointments = " + str(type(return_data[1][1][1])))
         serialized_appts = SerializeAppointments(return_data[1])
         resp = Response()
         resp.set_data(json.dumps(serialized_appts))
@@ -80,47 +79,45 @@ def create_app():
     
     @app.post("/fill-appointment")
     def fillAppointment():
-        print("Entered Fill Appointment")
+        #print("Entered Fill Appointment")
         data = request.get_json()
         query = "UPDATE appointment SET patient_id = " + str(data["patient_id"]) + ", filled = true WHERE id = " + str(data["appointment_id"]) + ';'
         return PostToDB([query], False)
         
     @app.post("/create-appointment")
     def createAppointment():
-        print("Entered create appointment")
+        #print("Entered create appointment")
         data = request.get_json()
         filled_query = insert_query_strings.insert_appointment + data["time"] + "\', \'" + str(data["listed_price"]) + "\', \'" + str(data["full_price"]) + "\', false, \'" + str(data["practice_id"]) + "\', NULL, \'" + str(data["service_id"])  + "\') RETURNING id;"
-        print(filled_query)
+        #print(filled_query)
         return PostToDB([create_query_strings.create_appointment_table, filled_query], True)
 
     @app.post("/register-patient")
     def registerPatient():
-        print("Entered Register Patient")
+        #print("Entered Register Patient")
         data = request.get_json()
         filled_query = insert_query_strings.insert_patient + data["first_name"] + "\', \'" + data["last_name"] + "\', \'" + data["zip"] + "\', \'" + data["email"] + "\', \'" + GenerateHash(data["password"]) + "\', \'" + data["phone_number"] + "\') RETURNING id;"
-        print("Filled query = " + filled_query)
+        #print("Filled query = " + filled_query)
         return PostToDB([create_query_strings.create_patient_table, filled_query], True)
         
     @app.post("/register-practice")
     def registerPractice():
-        print("Entered Register Practice")
+        #print("Entered Register Practice")
         data = request.get_json()
-        print("About to check for email")
         if EmailExists(data["email"]) == True:
             return Response("Email exists in Database- please use another")
         password = GenerateHash(data["password"])
-        print("Hashed Password = " + password)
         filled_query = insert_query_strings.insert_practice + data["email"] + "\', \'" + password + "\', \'" + data["name"] + "\', \'" + data["address1"] + "\', \'" + data["address2"] + "\', \'" + data["city"] + "\', \'" + data["state"] + "\', \'" + data["zip"] + "\') RETURNING id;"
-        print("Filled query = " + filled_query)
+        #print("Filled query = " + filled_query)
         return PostToDB([create_query_strings.create_practice_table, filled_query], True)
 
     @app.post("/reset-password")
     def ResetPassword():
-        print("Entering Reset Password")
+        #print("Entering Reset Password")
         data = request.get_json()
         new_pass_hashed = GenerateHash(data["new_password"])
         filled_query = update_query_strings.update_practice_password.format(password = new_pass_hashed, id = data["id"])
-        print("Filled Query = " + filled_query)
+        #print("Filled Query = " + filled_query)
         return PostToDB([filled_query], False)
 
     @app.post("/create-service")
@@ -135,7 +132,7 @@ def create_app():
 
     @app.put("/update-practice")
     def updatePractice():
-        print("Entered update practice")
+        #print("Entered update practice")
         data = request.get_json()
         filled_query = update_query_strings.update_practice.format(name = data["name"],
                                                                            email = data["email"],
@@ -145,12 +142,12 @@ def create_app():
                                                                            state = data["state"],
                                                                            zip = data["zip"],
                                                                            id = data["id"])
-        print("Filled query = " + filled_query)
+        #print("Filled query = " + filled_query)
         return PostToDB({filled_query}, False)
         
     @app.put("/update-practice-password")
     def updatePracticePassword():
-        print("Entering update practice password")
+        #print("Entering update practice password")
         data = request.get_json()
         #pass_result = CheckDBPass(data["email"], data["password"])
         #if(pass_result is False):
@@ -161,7 +158,7 @@ def create_app():
     
     @app.put("/update-appointment")
     def updateAppointment():
-        print("Entered update appointment")
+        #print("Entered update appointment")
         data = request.get_json()
         filled_query = update_query_strings.update_appointment.format(time = data["time"],
                                                                       listed_price = data["listed_price"],
@@ -169,13 +166,13 @@ def create_app():
                                                                       practice_id = data["practice_id"],
                                                                       service_id = data["service_id"],
                                                                       id = data["id"])
-        print("Filled query = " + filled_query)
+        #print("Filled query = " + filled_query)
         return PostToDB({filled_query}, False)
 
 
     def EmailExists(input_email):
         check_query = misc_query_strings.check_if_email_exists.format(email = input_email)
-        print("Query = " + check_query)
+        #print("Query = " + check_query)
         email_exists_result = GetFromDB([check_query])
         emailExists = email_exists_result[1][0]
         return emailExists
@@ -197,7 +194,6 @@ def create_app():
             new_appointment[2] = float(new_appointment[2])
             new_appointment[3] = float(new_appointment[3])
             serialized_appointments.append(new_appointment)
-        print("Type of appointment in serialized_appointments = " + str(type(serialized_appointments[0])))
         #for object in serialized_appointments[0]:
             #print("Data type = " + str(type(object)) + " , Data = " + str(object))
         return serialized_appointments
