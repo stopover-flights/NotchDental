@@ -9,6 +9,7 @@ import psycopg2
 from dotenv import load_dotenv
 from flask import Flask, request, Response
 from passlib.hash import bcrypt
+from datetime import datetime, date
 
 def create_app():
 
@@ -62,6 +63,21 @@ def create_app():
         data = request.get_json()
         filled_query = get_query_strings.get_open_appointments.format(practice_id = data["practice_id"])
         return_data = GetFromDB({filled_query}, True)
+        serialized_appts = SerializeAppointments(return_data[1])
+        resp = Response()
+        resp.set_data(json.dumps(serialized_appts))
+        return resp
+    
+    @app.get("/get-appointments-by-date")
+    def getAppointmentsByDate():
+        data = request.get_json()
+        print("Datetime = " + data["date"])
+        datetime_object = datetime.strptime(data["date"], '%y-%m-%d %H:%M:%S')
+        print("Date = " + str(datetime_object.date()))
+        filled_query = get_query_strings.get_appointments_by_date.format(practice_id = data["practice_id"], date = datetime_object.date())
+        print("Query = " + filled_query)
+        return_data = GetFromDB({filled_query}, True)
+        print("Return data = " + str(return_data)[1])
         serialized_appts = SerializeAppointments(return_data[1])
         resp = Response()
         resp.set_data(json.dumps(serialized_appts))
