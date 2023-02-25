@@ -102,9 +102,9 @@ def create_app():
         
     @app.post("/create-appointment")
     def createAppointment():
-        #print("Entered create appointment")
+        print("Entered create appointment")
         data = request.get_json()
-        filled_query = insert_query_strings.insert_appointment + data["time"] + "\', \'" + str(data["listed_price"]) + "\', \'" + str(data["full_price"]) + "\', false, \'" + str(data["practice_id"]) + "\', NULL, \'" + str(data["service_id"])  + "\', true) RETURNING id;"
+        filled_query = insert_query_strings.insert_appointment.format(time = data["time"], listed_price = str(data["listed_price"]), full_price = str(data["full_price"]), practice_id = str(data["practice_id"]), service_id = str(data["service_id"]))
         print(filled_query)
         return PostToDB([create_query_strings.create_appointment_table, filled_query], True)
 
@@ -112,8 +112,7 @@ def create_app():
     def registerPatient():
         #print("Entered Register Patient")
         data = request.get_json()
-        filled_query = insert_query_strings.insert_patient + data["first_name"] + "\', \'" + data["last_name"] + "\', \'" + data["zip"] + "\', \'" + data["email"] + "\', \'" + GenerateHash(data["password"]) + "\', \'" + data["phone_number"] + "\') RETURNING id;"
-        #print("Filled query = " + filled_query)
+        filled_query = insert_query_strings.insert_patient.format(first_name = data["first_name"], last_name = data["last_name"], zip = data["zip"], email = data["email"], password = GenerateHash(data["password"]), phone_number = data["phone_number"])
         return PostToDB([create_query_strings.create_patient_table, filled_query], True)
         
     @app.post("/register-practice")
@@ -123,7 +122,7 @@ def create_app():
         if EmailExists(data["email"]) == True:
             return Response("Email exists in Database- please use another")
         password = GenerateHash(data["password"])
-        filled_query = insert_query_strings.insert_practice + data["email"] + "\', \'" + password + "\', \'" + data["name"] + "\', \'" + data["address1"] + "\', \'" + data["address2"] + "\', \'" + data["city"] + "\', \'" + data["state"] + "\', \'" + data["zip"] + "\') RETURNING id;"
+        filled_query = insert_query_strings.insert_practice.format(email = data["email"], password = password, name = data["name"], address1 = data["address1"], address2 = data["address2"], city = data["city"], state = data["state"], zip = data["zip"])
         #print("Filled query = " + filled_query)
         return PostToDB([create_query_strings.create_practice_table, filled_query], True)
 
