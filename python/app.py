@@ -5,6 +5,9 @@ from strings import update_query_strings
 from strings import create_query_strings
 from strings import insert_query_strings
 from strings import get_query_strings
+from db_objects.appointment import Appointment
+from db_objects.practice import Practice
+from utility_classes.json_encoders import CustomEncoder
 import psycopg2
 from dotenv import load_dotenv
 from flask import Flask, request, Response
@@ -64,8 +67,7 @@ def create_app():
         filled_query = get_query_strings.get_open_appointments.format(practice_id = data["practice_id"])
         return_data = GetFromDB({filled_query}, True)
         serialized_appts = SerializeAppointments(return_data[1])
-        resp = Response()
-        resp.set_data(json.dumps(serialized_appts))
+        resp = Response(json.dumps(serialized_appts))
         return resp
     
     @app.get("/get-appointments-by-date")
@@ -87,8 +89,9 @@ def create_app():
     def getPracticeInfo():
         query = get_query_strings.get_practice_info.format(practice_id = request.get_json()["practice_id"])
         returnData = GetFromDB({query})
-        returnInfo = {"id" : returnData[1][0], "email" : returnData[1][1], "name": returnData[1][2], "address1": returnData[1][3], "address2": returnData[1][4], "city": returnData[1][5], "state":returnData[1][6], "zip": returnData[1][7]}
-        resp = Response(json.dumps(returnInfo, indent = 4))
+        print(str(returnData[1]))
+        practice_info = Practice(returnData[1][0], returnData[1][1], returnData[1][2], returnData[1][3], returnData[1][4], returnData[1][5], returnData[1][6], returnData[1][7])
+        resp = Response(json.dumps(practice_info, indent=4, cls=CustomEncoder))
         return resp
     
     #POST REQUESTS
