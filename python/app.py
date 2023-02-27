@@ -67,29 +67,24 @@ def create_app():
         filled_query = get_query_strings.get_open_appointments.format(practice_id = data["practice_id"])
         return_data = GetFromDB({filled_query}, True)
         serialized_appts = SerializeAppointments(return_data[1])
-        resp = Response(json.dumps(serialized_appts))
+        resp = Response(json.dumps(serialized_appts, indent=4, cls=CustomEncoder))
         return resp
     
     @app.get("/get-appointments-by-date")
     def getAppointmentsByDate():
         data = request.get_json()
-        print("Datetime = " + data["date"])
         datetime_object = datetime.strptime(data["date"], '%y-%m-%d %H:%M:%S')
-        print("Date = " + str(datetime_object.date()))
         filled_query = get_query_strings.get_appointments_by_date.format(practice_id = data["practice_id"], date = datetime_object.date())
-        print("Query = " + filled_query)
         return_data = GetFromDB({filled_query}, True)
-        print("Return data = " + str(return_data)[1])
         serialized_appts = SerializeAppointments(return_data[1])
         resp = Response()
-        resp.set_data(json.dumps(serialized_appts))
+        resp.set_data(json.dumps(serialized_appts, indent=4, cls=CustomEncoder))
         return resp
     
     @app.get("/get-practice-info")
     def getPracticeInfo():
         query = get_query_strings.get_practice_info.format(practice_id = request.get_json()["practice_id"])
         returnData = GetFromDB({query})
-        print(str(returnData[1]))
         practice_info = Practice(returnData[1][0], returnData[1][1], returnData[1][2], returnData[1][3], returnData[1][4], returnData[1][5], returnData[1][6], returnData[1][7])
         resp = Response(json.dumps(practice_info, indent=4, cls=CustomEncoder))
         return resp
@@ -211,9 +206,9 @@ def create_app():
             new_appointment[1] = new_appointment[1].isoformat()
             new_appointment[2] = float(new_appointment[2])
             new_appointment[3] = float(new_appointment[3])
-            serialized_appointments.append(new_appointment)
-        #for object in serialized_appointments[0]:
-            #print("Data type = " + str(type(object)) + " , Data = " + str(object))
+            appointment_info = Appointment(new_appointment[0], new_appointment[1], new_appointment[2], new_appointment[3], new_appointment[4], new_appointment[5], new_appointment[6], new_appointment[7], new_appointment[8])
+            serialized_appointments.append(appointment_info)
         return serialized_appointments
-                
+    
+
     return app
