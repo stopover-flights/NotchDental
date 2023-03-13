@@ -19,14 +19,19 @@ def create_app():
     load_dotenv()
 
     url = os.getenv("DATABASE_URL")
-    connection = psycopg2.connect(url)
+    global_connection = psycopg2.connect(url)
     app = Flask(__name__)
 
     hasher = bcrypt.using(rounds=13)
 
     def PostToDB(queries, hasReturn):
-        with connection:
-            with connection.cursor() as cursor:
+        local_connection = 0
+        if(global_connection.closed is 1):
+            local_connection = psycopg2.connect(url)
+        else:
+            local_connection = global_connection
+        with local_connection:
+            with local_connection.cursor() as cursor:
                 for query in queries:
                     cursor.execute(query)
                 if(hasReturn):
@@ -35,10 +40,16 @@ def create_app():
                 else:
                     resp = Response("Success!")
             return resp
+
         
     def GetFromDB(queries, returnsMultiple = False):
-        with connection:
-            with connection.cursor() as cursor:
+        local_connection = 0
+        if(global_connection.closed is 1):
+            local_connection = psycopg2.connect(url)
+        else:
+            local_connection = global_connection
+        with local_connection:
+            with local_connection.cursor() as cursor:
                 for query in queries:
                     cursor.execute(query)
                     if returnsMultiple is True:
