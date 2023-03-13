@@ -1,6 +1,6 @@
 insert_practice = ("""INSERT INTO dental_practice 
 (email, password, name, address1, address2, city, state, zip)
-VALUES (\'{email}\', \'{password}\', \'{name}\', \'{address1}\', \'{address2}\', \'{city}\', \'{state}\', \'{zip} ) RETURNING id""")
+VALUES (\'{email}\', \'{password}\', \'{name}\', \'{address1}\', \'{address2}\', \'{city}\', \'{state}\', \'{zip}\' ) RETURNING id""")
                    
 insert_service = "INSERT INTO service (name) VALUES (\'{name}\') RETURNING id;"
 
