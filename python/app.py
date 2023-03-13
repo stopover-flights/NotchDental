@@ -26,7 +26,7 @@ def create_app():
 
     def PostToDB(queries, hasReturn):
         local_connection = 0
-        if(global_connection.closed is 1):
+        if(global_connection.closed == 1):
             local_connection = psycopg2.connect(url)
         else:
             local_connection = global_connection
@@ -44,7 +44,7 @@ def create_app():
         
     def GetFromDB(queries, returnsMultiple = False):
         local_connection = 0
-        if(global_connection.closed is 1):
+        if(global_connection.closed == 1):
             local_connection = psycopg2.connect(url)
         else:
             local_connection = global_connection
@@ -52,7 +52,7 @@ def create_app():
             with local_connection.cursor() as cursor:
                 for query in queries:
                     cursor.execute(query)
-                    if returnsMultiple is True:
+                    if returnsMultiple == True:
                         return_data = cursor.fetchall()
                     else:
                         return_data = cursor.fetchone()
